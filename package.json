@@ -1,0 +1,11 @@
+{
+  "name": "iam-totp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./iam-totp-server/src/index.ts && cd iam-totp-client && npm start"
+  },
+  "author": "",
+  "license": "ISC"
+}

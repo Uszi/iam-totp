@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "lib": ["ES2022"],
+      "module": "ES2022", //ESNext 
+      "moduleResolution": "Node",
+      "target": "ES2022",
+      "esModuleInterop": true,
+      "isolatedModules": false,
+    },
+    "include": [
+      "src"
+    ],
+    "ts-node": {
+      "esm": true
+    }
+  }
+  
