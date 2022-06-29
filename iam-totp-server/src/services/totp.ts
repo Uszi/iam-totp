@@ -31,6 +31,7 @@ export const isTOTPRequired = ( user, fingerprint_hash, ip_addr ) => {
 
     if(last_30days && last_device) {
         const currentIPLoopup = geoip.lookup(ip_addr)
+
         if( currentIPLoopup ) {
             const lastDeviceIPLookup = geoip.lookup(last_device.ip_addr)
             const point1 = { lat: currentIPLoopup.ll[0], lon: currentIPLoopup.ll[1] }
@@ -38,6 +39,9 @@ export const isTOTPRequired = ( user, fingerprint_hash, ip_addr ) => {
             const distance_km = heversine(point1, point2) / 1000 // in km
 
             return distance_km > IMPOSSIBLE_TRAVEL_DISTANCE
+        } else {
+            /* Do not force MFA if IP lookup failed */
+            return ip_addr !== last_device.ip_addr
         }
     }
 
