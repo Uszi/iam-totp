@@ -92,8 +92,10 @@ router.post('/verify', async (req, res) => {
     }
     try {
         const { KEY_NAME } = config
-        const decoded = jwt.verify(token, fs.readFileSync(path.join(__dirname, '..', 'vault', KEY_NAME)));
-
+        const decoded: any = jwt.verify(token, fs.readFileSync(path.join(__dirname, '..', 'vault', KEY_NAME)));
+        if(decoded.bIsTOTPRequired !== true) {
+            return res.sendStatus(400)
+        }
         const user = await User.findOne({ _id: decoded.sub })
         const { data: is_valid } = await axios.request({
             method: 'GET',

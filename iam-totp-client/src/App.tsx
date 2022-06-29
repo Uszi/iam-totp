@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import jwt_decode from "jwt-decode"
 import './App.css';
 
@@ -16,11 +16,21 @@ function App() {
   const registerPassword = useRef<HTMLInputElement>(null)
   const code = useRef<HTMLInputElement>(null)
 
+  useEffect(() => {
+    verifyToken()
+  })
+
   const verifyToken = () => {
     const token = localStorage.getItem('token')
     if(token) {
       try {
         const decodedToken: any = jwt_decode(token);
+        
+        if(new Date().getTime() / 1000 > decodedToken.exp) {
+          localStorage.clear()
+          return setPage('login')
+        }
+
         if ( decodedToken.bIsTOTPRequired === true ) {
           return setPage('verify')
         } else {
