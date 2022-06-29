@@ -11,10 +11,14 @@ export const secureApplication = async (req: MaybeSecureRequest, res: Response, 
     if(req?.headers?.authorization) {
         const { KEY_NAME } = config
         const token = req?.headers?.authorization
-        const decoded: any = jwt.verify(token, fs.readFileSync(path.join(__dirname, '..', 'vault', KEY_NAME)));
-        if(decoded.bIsTOTPRequired !== true) {
-            const user = await User.findOne({ _id: decoded.sub })
-            req.user = { username: user.username }
+        try {
+            const decoded: any = jwt.verify(token, fs.readFileSync(path.join(__dirname, '..', 'vault', KEY_NAME)));
+            if(decoded.bIsTOTPRequired !== true) {
+                const user = await User.findOne({ _id: decoded.sub })
+                req.user = { username: user.username }
+            }
+        } catch( err ) {
+            next()
         }
     }
     next()
